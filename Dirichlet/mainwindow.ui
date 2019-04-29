@@ -265,7 +265,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Discrepancy</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLabel" name="label_Discrepancy2">
@@ -278,7 +278,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Dicrepancy2</string>
+      <string/>
      </property>
     </widget>
    </widget>
@@ -343,7 +343,7 @@
       <x>10</x>
       <y>270</y>
       <width>161</width>
-      <height>131</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
@@ -420,7 +420,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>410</y>
+      <y>430</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -428,6 +428,62 @@
     <property name="text">
      <string>Show</string>
     </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>400</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Button</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_Border">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>310</y>
+      <width>197</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Border</string>
+    </property>
+    <layout class="QFormLayout" name="formLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_xBorder">
+       <property name="text">
+        <string>xBorder</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="lineEdit_xBorder">
+       <property name="text">
+        <string>0.5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_yBorder">
+       <property name="text">
+        <string>yBorder</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_yBorder">
+       <property name="text">
+        <string>0.5</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

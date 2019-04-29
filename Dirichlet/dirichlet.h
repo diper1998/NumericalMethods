@@ -40,6 +40,10 @@ public:
 
     int Task;
 
+
+    double xBorder;
+    double yBorder;
+
     void CreateVUFXY(){
 
         V = new double*[n+1];
@@ -94,6 +98,9 @@ public:
         h = (b-a)/(2*n);
         k = (d-c)/(2*m);
     }
+
+
+
 
 
     double GetBorderX_1(double x){ // 1, 2
@@ -207,8 +214,6 @@ public:
     }
 
 
-
-
     void SetFirstV(){
         for(int i = 1; i < n; i++ ){
             for(int j = 1; j < m; j++){
@@ -228,6 +233,52 @@ public:
             V[0][i] =  GetBorderY_1(c+i*k);
             V[n][i] =  GetBorderY_2(c+i*k);
         }
+
+    }
+
+
+
+    void SetFirstVBorder(){
+        int saveI = 0;
+
+        for(int i = 1; i < n+1; i++ ){
+            for(int j = 1; j < m+1; j++){
+                V[i][j] = 0;
+            }
+        }
+
+
+
+        for(int i = 0; i < n+1; i++){
+
+            V[i][0] =  GetBorderX_1(a+i*h);
+        }
+
+
+        for(int i = 0; i < m+1; i++){
+            V[0][i] =  GetBorderY_1(c+i*k);
+        }
+
+
+        for(int i = 0; a+i*h <= xBorder; i++){
+            V[i][m] = GetU(a+i*h, d);
+            saveI = i;
+        }
+
+        for(int i = saveI; i < n+1; i++){
+            V[i][int(yBorder/k - c)] = GetU(a+i*h, yBorder);
+        }
+
+
+        for(int i = 0; c+i*k <= yBorder; i++){
+            V[n][i] = GetU(b, c+i*k);
+            saveI = i;
+        }
+
+        for(int i = saveI; i < m+1; i++){
+            V[int(xBorder/h - a)][i] = GetU(xBorder, c+i*k);
+        }
+
 
     }
 
@@ -254,8 +305,6 @@ public:
         }
 
     }
-
-
 
 
     double SetErrorGetMax(double** A, double** B){
@@ -317,6 +366,23 @@ public:
     }
 
 
+
+
+
+   void MethodSeidelBorder(){
+
+        CreateVUFXY();
+        SetSteps();
+        SetF();
+        SetFirstVBorder();
+
+
+       method.SolveSystemSeidelBorder(V, F, Eps, N, n, m, h, k, resEpsCount, xBorder, yBorder);
+
+
+    }
+
+
    void MethodIteration(){
 
         CreateVUFXY();
@@ -324,8 +390,76 @@ public:
         SetF();
         SetFirstV();
 
+        double midStep;
+        int midN;
+        double maxL;
+        double minL;
+
+        if(t == 0 ){
+
+             //midStep = (h+k)/2.0;
+
+
+            if(h>k){
+            midStep = k;
+            } else {
+            midStep = h;
+            }
+
+             midN = (n+m)/2;
+             maxL = (8.0/(midStep*midStep))*cos(acos(-1)/(2*midN))*cos(acos(-1)/(2*midN));
+             minL = (8.0/(midStep*midStep))*sin(acos(-1)/(2*midN))*sin(acos(-1)/(2*midN));
+
+             if(Task == 0)
+             t = midStep*midStep/4;
+
+             if(Task == 1)
+             t = midStep*midStep/16;
+        }
+
 
        method.SolveSystemIteration(V, F, Eps, N, n, m, h, k, t, resEpsCount);
+
+
+    }
+
+
+
+   void MethodIterationBorder(){
+
+        CreateVUFXY();
+        SetSteps();
+        SetF();
+        SetFirstVBorder();
+
+        double midStep;
+        int midN;
+        double maxL;
+        double minL;
+
+        if(t == 0){
+
+             //midStep = (h+k)/2.0;
+
+
+            if(h>k){
+            midStep = k;
+            } else {
+            midStep = h;
+            }
+
+             midN = (n+m)/2;
+             maxL = (8.0/(midStep*midStep))*cos(acos(-1)/(2*midN))*cos(acos(-1)/(2*midN));
+             minL = (8.0/(midStep*midStep))*sin(acos(-1)/(2*midN))*sin(acos(-1)/(2*midN));
+
+
+             t = midStep*midStep/4;
+
+
+        }
+
+
+       method.SolveSystemIterationBorder(V, F, Eps, N, n, m, h, k, t, resEpsCount, xBorder, yBorder);
 
 
     }
@@ -352,6 +486,32 @@ public:
         SetF2();
         SetFirstV2();
 
+        double midStep;
+        int midN;
+        double maxL;
+        double minL;
+
+        if(t == 0){
+             //midStep = (h+k)/2.0;
+
+
+            if(h>k){
+            midStep = k;
+            } else {
+            midStep = h;
+            }
+
+             midN = (2*n+2*m)/2;
+             maxL = (8.0/(midStep*midStep))*cos(acos(-1)/(2*midN))*cos(acos(-1)/(2*midN));
+             minL = (8.0/(midStep*midStep))*sin(acos(-1)/(2*midN))*sin(acos(-1)/(2*midN));
+
+             if(Task == 0)
+                 t = midStep*midStep/4;
+
+
+             if(Task == 1)
+                 t = midStep*midStep/(16*2);
+        }
 
        method.SolveSystemIteration(V2, F2, Eps, N, 2*n, 2*m, h, k, t, resEpsCount);
 
@@ -370,6 +530,20 @@ public:
     }
 
 
+    void SetUBorder(){
+        for(int i = 0; i < n+1; i++ ){
+            for(int j = 0; j < m+1; j++){
+                if(a+h*i > xBorder && c+k*j > yBorder){
+                    U[i][j] = 0;
+                    continue;
+                }
+                U[i][j] = GetU(a+h*i, c+k*j);
+            }
+        }
+
+    }
+
+
     void SetDiscrepancy(double** u, double **f, int N, int M, double h, double k){
 
         double A = 0.5*(h*h*k*k)/(h*h+k*k);
@@ -377,15 +551,18 @@ public:
         double K = 1.0/(k*k);
         discrepancy = 0;
 
+
         for (int i = 1; i < N ; i++)
             for (int j = 1; j < M ; j++)
             {
 
-                Discrepancy[i][j] = -f[i][j] - (H*(u[i-1][j]-2*u[i][j]+u[i+1][j]) + K*(u[i][j-1]-2*u[i][j]+u[i][j+1]));
-                discrepancy+=Discrepancy[i][j]*Discrepancy[i][j];
+                Discrepancy[i][j] = fabs(-f[i][j] - (H*(u[i-1][j]-2*u[i][j]+u[i+1][j]) + K*(u[i][j-1]-2*u[i][j]+u[i][j+1])));
+                if(Discrepancy[i][j] > discrepancy)
+                    discrepancy  = Discrepancy[i][j];
+                //discrepancy+=Discrepancy[i][j]*Discrepancy[i][j];
             }
 
-        discrepancy = sqrt(discrepancy);
+        //discrepancy = sqrt(discrepancy);
 
 
     }

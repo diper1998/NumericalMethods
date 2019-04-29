@@ -102,16 +102,14 @@ void MainWindow::on_pushButtonStart_clicked()
         if(ui->radioButton_U_V->isChecked())
         SetTable(ui->firstTable, myDir.Error, n+1, m+1);
 
-
-
-
         ui->label_it->setText("Iterations = " + QVariant(myDir.resEpsCount[1]).toString());
         ui->label_Eps->setText("Eps = " + QVariant(myDir.resEpsCount[0]).toString());
         ui->label_Error->setText("||U-V|| = " + QVariant(maxError).toString());
         ui->label_xError->setText("x = " + QVariant(myDir.xError).toString());
         ui->label_yError->setText("y = " + QVariant(myDir.yError).toString());
-        ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
-        ui->label_Discrepancy2->setText("");
+        //ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
+        //ui->label_Discrepancy2->setText("");
+
 
     }
 // Main
@@ -140,10 +138,10 @@ void MainWindow::on_pushButtonStart_clicked()
         }
 
 
-        myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
-         ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
-        myDir.SetDiscrepancy(myDir.V2, myDir.F, n, m, myDir.h, myDir.k);
-        ui->label_Discrepancy2->setText("Discrepancy2 = " + QVariant(myDir.discrepancy).toString());
+       // myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
+       // ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
+       // myDir.SetDiscrepancy(myDir.V2, myDir.F, n, m, myDir.h, myDir.k);
+       // ui->label_Discrepancy2->setText("Discrepancy2 = " + QVariant(myDir.discrepancy).toString());
 
 
         myDir.SetSteps();
@@ -170,6 +168,8 @@ void MainWindow::on_pushButtonStart_clicked()
 
     }
 
+    ui->lineEdit_t->setText(QVariant(myDir.t).toString());
+
 }
 
 void MainWindow::on_pushButtonShow_clicked()
@@ -192,5 +192,67 @@ void MainWindow::on_pushButtonShow_clicked()
 
     if(ui->radioButton_U_V->isChecked())
     SetTable(ui->firstTable, myDir.Error, myDir.n+1, myDir.m+1);
+
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    double a = QVariant(ui->lineEdit_a->text()).toDouble();
+    double b = QVariant(ui->lineEdit_b->text()).toDouble();
+    double c = QVariant(ui->lineEdit_c->text()).toDouble();
+    double d = QVariant(ui->lineEdit_d->text()).toDouble();
+
+    int n = QVariant(ui->lineEdit_n->text()).toInt();
+    int m = QVariant(ui->lineEdit_m->text()).toInt();
+
+    int N = QVariant(ui->lineEdit_N->text()).toInt();
+    double Eps = QVariant(ui->lineEdit_E->text()).toDouble();
+
+
+    double t = QVariant(ui->lineEdit_t->text()).toDouble();
+
+    double xBorder = QVariant(ui->lineEdit_xBorder->text()).toDouble();
+    double yBorder = QVariant(ui->lineEdit_yBorder->text()).toDouble();
+
+    double maxError;
+
+     myDir.SetParam(a, b, c, d, n, m, t, Eps, N, 0);
+     myDir.xBorder = xBorder;
+     myDir.yBorder = yBorder;
+
+     if(ui->radioButton_Seidel->isChecked())
+     myDir.MethodSeidelBorder();
+
+     if(ui->radioButton_Iteration->isChecked())
+     myDir.MethodIterationBorder();
+
+     myDir.SetUBorder();
+
+     maxError = myDir.SetErrorGetMax(myDir.V, myDir.U);
+
+     if(ui->radioButton_V->isChecked())
+     SetTable(ui->firstTable, myDir.V, n+1, m+1);
+
+     if(ui->radioButton_U->isChecked())
+     SetTable(ui->firstTable, myDir.U, n+1, m+1);
+
+     if(ui->radioButton_U_V->isChecked())
+     SetTable(ui->firstTable, myDir.Error, n+1, m+1);
+
+     //myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
+
+
+     ui->label_it->setText("Iterations = " + QVariant(myDir.resEpsCount[1]).toString());
+     ui->label_Eps->setText("Eps = " + QVariant(myDir.resEpsCount[0]).toString());
+     ui->label_Error->setText("||U-V|| = " + QVariant(maxError).toString());
+     ui->label_xError->setText("x = " + QVariant(myDir.xError).toString());
+     ui->label_yError->setText("y = " + QVariant(myDir.yError).toString());
+     //ui->label_Discrepancy->setText("");
+     //ui->label_Discrepancy2->setText("");
+
+
+      ui->lineEdit_t->setText(QVariant(myDir.t).toString());
+
+
 
 }
