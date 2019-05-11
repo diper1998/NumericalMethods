@@ -410,6 +410,11 @@ public:
              maxL = (8.0/(midStep*midStep))*cos(acos(-1)/(2*midN))*cos(acos(-1)/(2*midN));
              minL = (8.0/(midStep*midStep))*sin(acos(-1)/(2*midN))*sin(acos(-1)/(2*midN));
 
+            //maxL = (4.0/(h*h))*sin(acos(-1)*(n-1)/(2*n))*sin(acos(-1)*(n-1)/(2*n)) + (4.0/(k*k))*sin(acos(-1)*(m-1)/(2*m))*sin(acos(-1)*(m-1)/(2*m));
+            // minL = (4.0/(h*h))*sin(acos(-1)/(2*n))*sin(acos(-1)/(2*n)) + (4.0/(k*k))*sin(acos(-1)/(2*m))*sin(acos(-1)/(2*m));
+
+             t = 2/(maxL+minL);
+
              if(Task == 0)
              t = midStep*midStep/4;
 
@@ -544,22 +549,25 @@ public:
     }
 
 
-    void SetDiscrepancy(double** u, double **f, int N, int M, double h, double k){
+    void SetDiscrepancy(double** u, double **f, int N_, int M_, double h_, double k_){
 
-        double A = 0.5*(h*h*k*k)/(h*h+k*k);
-        double H = 1.0/(h*h);
-        double K = 1.0/(k*k);
+        double A = 0.5*(h_*h_*k_*k_)/(h_*h_+k_*k_);
+        double H = 1.0/(h_*h_);
+        double K = 1.0/(k_*k_);
         discrepancy = 0;
 
 
-        for (int i = 1; i < N ; i++)
-            for (int j = 1; j < M ; j++)
+        for (int i = 1; i < N_ ; i++)
+            for (int j = 1; j < M_ ; j++)
             {
 
                 Discrepancy[i][j] = fabs(-f[i][j] - (H*(u[i-1][j]-2*u[i][j]+u[i+1][j]) + K*(u[i][j-1]-2*u[i][j]+u[i][j+1])));
+
+                //Discrepancy[i][j] = fabs(A * ((u[i - 1][j] + u[i + 1][j])*H + (u[i][j -1] + u[i][j + 1])*K + f[i][j]) - u[i][j]);
+
                 if(Discrepancy[i][j] > discrepancy)
                     discrepancy  = Discrepancy[i][j];
-                //discrepancy+=Discrepancy[i][j]*Discrepancy[i][j];
+               // discrepancy+=Discrepancy[i][j]*Discrepancy[i][j];
             }
 
         //discrepancy = sqrt(discrepancy);

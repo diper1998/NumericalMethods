@@ -212,7 +212,7 @@ void SolveSystemIterationBorder(double** u, double **f, double eps, int count, i
                 for (int j = 1; j < M ; j++)
                 {
 
-                    if(i*h >= xBorder && j*k >= yBorder){
+                    if(i*h >= xBorder  && j*k >= yBorder ){
                         continue;
                     }
 

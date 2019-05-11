@@ -107,8 +107,8 @@ void MainWindow::on_pushButtonStart_clicked()
         ui->label_Error->setText("||U-V|| = " + QVariant(maxError).toString());
         ui->label_xError->setText("x = " + QVariant(myDir.xError).toString());
         ui->label_yError->setText("y = " + QVariant(myDir.yError).toString());
-        //ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
-        //ui->label_Discrepancy2->setText("");
+        ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
+        ui->label_Discrepancy2->setText("");
 
 
     }
@@ -122,6 +122,8 @@ void MainWindow::on_pushButtonStart_clicked()
         ui->label_Eps->setText("Eps = " + QVariant(myDir.resEpsCount[0]).toString());
 
         myDir.MethodSeidel2();
+        ui->label_it2->setText("Iterations = " + QVariant(myDir.resEpsCount[1]).toString());
+        ui->label_Eps2->setText("Eps = " + QVariant(myDir.resEpsCount[0]).toString());
 
         }
 
@@ -134,14 +136,17 @@ void MainWindow::on_pushButtonStart_clicked()
         ui->label_Eps->setText("Eps = " + QVariant(myDir.resEpsCount[0]).toString());
 
         myDir.MethodIteration2();
+        ui->label_it2->setText("Iterations = " + QVariant(myDir.resEpsCount[1]).toString());
+        ui->label_Eps2->setText("Eps = " + QVariant(myDir.resEpsCount[0]).toString());
+
 
         }
 
 
-       // myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
-       // ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
-       // myDir.SetDiscrepancy(myDir.V2, myDir.F, n, m, myDir.h, myDir.k);
-       // ui->label_Discrepancy2->setText("Discrepancy2 = " + QVariant(myDir.discrepancy).toString());
+        myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
+        ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
+        myDir.SetDiscrepancy(myDir.V2, myDir.F, n, m, myDir.h, myDir.k);
+        ui->label_Discrepancy2->setText("Discrepancy2 = " + QVariant(myDir.discrepancy).toString());
 
 
         myDir.SetSteps();
@@ -239,7 +244,7 @@ void MainWindow::on_pushButton_clicked()
      if(ui->radioButton_U_V->isChecked())
      SetTable(ui->firstTable, myDir.Error, n+1, m+1);
 
-     //myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
+     myDir.SetDiscrepancy(myDir.V, myDir.F, n, m, myDir.h, myDir.k);
 
 
      ui->label_it->setText("Iterations = " + QVariant(myDir.resEpsCount[1]).toString());
@@ -247,8 +252,8 @@ void MainWindow::on_pushButton_clicked()
      ui->label_Error->setText("||U-V|| = " + QVariant(maxError).toString());
      ui->label_xError->setText("x = " + QVariant(myDir.xError).toString());
      ui->label_yError->setText("y = " + QVariant(myDir.yError).toString());
-     //ui->label_Discrepancy->setText("");
-     //ui->label_Discrepancy2->setText("");
+     ui->label_Discrepancy->setText("Discrepancy = " + QVariant(myDir.discrepancy).toString());
+     ui->label_Discrepancy2->setText("");
 
 
       ui->lineEdit_t->setText(QVariant(myDir.t).toString());
